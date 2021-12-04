@@ -1,0 +1,379 @@
+<html>
+<head>
+	<!-- Jquery
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+	<!--Leaflet-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+	integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+	crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+	integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+	crossorigin=""></script>
+
+	<!--modal-->
+	<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.css" rel="stylesheet">
+
+	<style>
+	.leaflet-left {
+		left: 280;
+	}
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}
+
+	.clearfix {
+		display: inline-block;
+	}
+	</style>
+
+	<!--Leaflet Toolbar-->
+    <link rel="stylesheet" href="../node_modules/leaflet-toolbar/dist/leaflet.toolbar.css"/>
+    <script src="../node_modules/leaflet-toolbar/dist/leaflet.toolbar.js"></script>
+
+	<!--Leaflet Region Contains Point-->
+	<script src="https://cdn.rawgit.com/hayeswise/Leaflet.PointInPolygon/v1.0.0/wise-leaflet-pip.js"></script>
+
+   <!--Map Css position-->
+   <style>
+   	#map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+   </style>
+
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+   crossorigin="anonymous">
+
+   <!-- FontAwesome-->
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+	<!--Side bar Css-->
+	<link rel="stylesheet" href="./css/sidebar.css">
+
+	<!--Leaflet-Heatmap-->
+	<script src="/node_modules/heatmap.js/build/heatmap.js"></script>
+	<script src="/node_modules/leaflet-heatmap/leaflet-heatmap.js"></script>
+</head>
+<body>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+		https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+	<!-- Body Embedded Code
+	<div><button id="btn-logout">LogOut</button></div>
+	<div><button id="firebase-data">Data</button></div>
+	<div id = "map"></div>
+	<script>
+		var map = L.map('map').setView([-12.99936, -38.51165], 13.5);
+		L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}@2x.png?key=L6Qz68Q1BNIxubtiRVfS', {
+			attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+		}).addTo(map);
+	</script>
+	-->
+
+	<div class="page-wrapper chiller-theme toggled">
+		<a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+		  	<i class="fas fa-bars"></i>
+		</a>
+		<nav id="sidebar" class="sidebar-wrapper">
+			<div class="sidebar-content" style="padding-bottom: 10px;">
+				<div class="sidebar-brand">
+					<img class = "sidebar-img" id="sidebar-logo" src="./img/smartfirenome.png">
+					<a href="#">SmartFire UFBA</a>
+					<div id="close-sidebar">
+						<i class="fas fa-times"></i>
+					</div>
+				</div>
+				<div class="sidebar-header">
+				<div class="user-pic">
+					<img class="img-responsive img-rounded" 
+					src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+					alt="User picture">
+				</div>
+				<div class="user-info">
+					<span class="user-name">Jhon
+						<strong>Smith</strong>
+					</span>
+					<span class="user-role">Administrator</span>
+					<span class="user-status">
+						<i class="fa fa-circle"></i>
+						<span>Online</span>
+					</span>
+				</div>
+				</div>
+				<!-- sidebar-header  -->
+				<div class="sidebar-search">
+					<div>
+						<div class="input-group">
+							<input type="text" class="form-control search-menu" placeholder="Search...">
+							<div class="input-group-append">
+								<span class="input-group-text">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- sidebar-search  -->
+				<div class="sidebar-menu">
+					<ul>
+						<li class="header-menu">
+							<span>DashBoard</span>
+						</li>
+						<li>
+							<a id="Home" href="home.html">
+								<i class="fas fa-home"></i>
+								<span>Menu Principal</span>
+							</a>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="monitoramento" href="#">
+								<i class="fa fa-chart-line"></i>
+								<span style="font-size:13px">Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="monitoramento.html">
+									<i class="fas fa-chart-bar"></i>
+									<span>Pontual</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="#">
+									<i class="fas fa-chart-area"></i>
+									<span>Regional</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="alertas" href="#">
+								<i class="fas fa-bell"></i>
+								<span>Alertas</span>
+								<span id="alertas-counter" class="badge badge-pill badge-danger"></span>
+							</a>
+						</li>
+						<div id="submenu-alertas" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="alertas-ativos" href="alertasAtivos.html">
+									<i class="fas fa-exclamation-triangle"></i>
+									<span>Alertas Ativos</span>
+									<span id="alertas-counter-sub" class="badge badge-pill badge-danger"></span>
+								</a>
+							</li>
+							<li>
+								<a id="mapa-calor" href="mapaCalor.html">
+									<i class="fas fa-fire"></i>
+									<span>Mapa de Calor</span>
+								</a>
+							</li>
+						</div>
+						<li>
+							<a href="#">
+								<i class="fas fa-history"></i>
+								<span>Histórico</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-user"></i>
+								<span>Contatos</span>
+								<!--<span class="badge badge-pill badge-warning">New</span>-->
+							</a>
+						</li>
+						<li class="header-menu">
+						<span>Configurações de Mapa</span>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="Regioes" href="#">
+								<i class="far fa-map"></i>
+								<span>Regiões</span>
+							</a>
+						</li>
+						<div id="submenu-regioes" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="adicionarRegiao.html">
+									<i class="fas fa-plus"></i>
+									<span>Adicionar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="editarRegiao.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerRegiao" href="removerRegiao.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Região</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="pontos-monitoramento" href="#">
+								<i class="fas fa-map-marker-alt"></i>
+								<span style="font-size:13px">pontos de Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-ponto-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarPonto" href="adicionarPonto.html">
+									<i class="fas fa-plus-square"></i>
+									<span style="font-size:13px">Adicionar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarPonto" href="editarPonto.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerPonto" href="removerPonto.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Ponto</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="area-isolamento" href="#">
+								<i class="fas fa-chart-pie"></i>
+								<span style="font-size:13px">Área de Isolamento</span>
+							</a>
+						</li>
+						<div id="submenu-area-isolamento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarIsolamento" href="adicionarIsolamento.html">
+									<i class="fas fa-plus-circle"></i>
+									<span>Adicionar Área</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerIsolamento" href="removerIsolamento.html">
+									<i class="fas fa-minus-circle"></i>
+									<span>Remover Área</span>
+								</a>
+							</li>
+						</div>
+					</ul>
+				</div>
+				<!-- sidebar-menu  -->
+			</div>
+			<!-- sidebar-content  -->
+			<div class="sidebar-footer">
+				<a href="#">
+					<i class="fas fa-user"></i>
+					<!--<span class="badge badge-pill badge-warning notification">3</span>-->
+				</a>
+				<a href="#">
+					<i class="fa fa-envelope"></i>
+					<span class="badge badge-pill badge-success notification">7</span>
+				</a>
+				<a href="#">
+					<i class="fa fa-cog"></i>
+					<span class="badge-sonar"></span>
+				</a>
+				<a href="#">
+				<i id ="log-off" class="fa fa-power-off"></i>
+				</a>
+		  </div>
+		</nav>
+		<!-- sidebar-wrapper  -->
+		<main class="page-content">
+		  <div class="container-fluid">
+			<!--
+			<div><button id="btn-logout">LogOut</button></div>
+			<div><button id="firebase-data">Data</button></div>
+			-->
+			<div id = "map"></div>
+			<script>
+				importRegionsAcessos = true;
+				var centralizar = L.Toolbar2.Action.extend({
+                    options: {
+                        toolbarIcon: {  
+                            html: '&#9873;',
+                            tooltip: 'Centralizar'
+                        }
+                    },
+
+                    addHooks: function () {
+                        map.setView([-12.99936, -38.51165], 13.5);
+                    }
+
+                });
+
+				
+				var cfg = {
+				// radius should be small ONLY if scaleRadius is true (or small radius is intended)
+				"radius": .001,
+				"maxOpacity": .99, 
+				// scales the radius based on map zoom
+				"scaleRadius": true, 
+				// if set to false the heatmap uses the global maximum for colorization
+				// if activated: uses the data maximum within the current map boundaries 
+				//   (there will always be a red spot with useLocalExtremas true)
+				"useLocalExtrema": true,
+				//"minOpacity":0.5,
+				"blur": .9, // AUMENTA OU DIMINUI A ÁREA VERMELHA NO CÍRCULO   
+				// which field name in your data represents the latitude - default "lat"
+				latField: 'lat',
+				// which field name in your data represents the longitude - default "lng"
+				lngField: 'lng',
+				// which field name in your data represents the data value - default "value"
+				valueField: 'count'
+				};
+
+				var testData = {
+          			max: 8, // VALOR É RELATIVO
+					  data: [{lat: -12.997595506996065,lng: -38.507874011993415, count: 8},{lat: -12.99941448901624,lng: -38.50973010063172,count:5}]
+						//data: [{lat: 24.6408, lng:46.7728, count: 3},{lat: 50.75, lng:-1.55, count: 1},{lat: 52.6333, lng:1.75, count: 1},{lat: 48.15, lng:9.4667, count: 1},{lat: 52.35, lng:4.9167, count: 2},{lat: 60.8, lng:11.1, count: 1},{lat: 43.561, lng:-116.214, count: 1},{lat: 47.5036, lng:-94.685, count: 1},{lat: 42.1818, lng:-71.1962, count: 1},{lat: 42.0477, lng:-74.1227, count: 1},{lat: 40.0326, lng:-75.719, count: 1},{lat: 40.7128, lng:-73.2962, count: 2},{lat: 27.9003, lng:-82.3024, count: 1},{lat: 38.2085, lng:-85.6918, count: 1},{lat: 46.8159, lng:-100.706, count: 1},{lat: 30.5449, lng:-90.8083, count: 1},{lat: 44.735, lng:-89.61, count: 1},{lat: 41.4201, lng:-75.6485, count: 2},{lat: 39.4209, lng:-74.4977, count: 1},{lat: 39.7437, lng:-104.979, count: 1},{lat: 39.5593, lng:-105.006, count: 1},{lat: 45.2673, lng:-93.0196, count: 1},{lat: 41.1215, lng:-89.4635, count: 1},{lat: 43.4314, lng:-83.9784, count: 1},{lat: 43.7279, lng:-86.284, count: 1},{lat: 40.7168, lng:-73.9861, count: 1},{lat: 47.7294, lng:-116.757, count: 1},{lat: 47.7294, lng:-116.757, count: 2},{lat: 35.5498, lng:-118.917, count: 1},{lat: 34.1568, lng:-118.523, count: 1},{lat: 39.501, lng:-87.3919, count: 3},{lat: 33.5586, lng:-112.095, count: 1},{lat: 38.757, lng:-77.1487, count: 1},{lat: 33.223, lng:-117.107, count: 1},{lat: 30.2316, lng:-85.502, count: 1},{lat: 39.1703, lng:-75.5456, count: 8},{lat: 30.0041, lng:-95.2984, count: 2},{lat: 29.7755, lng:-95.4152, count: 1},{lat: 41.8014, lng:-87.6005, count: 1},{lat: 37.8754, lng:-121.687, count: 7},{lat: 38.4493, lng:-122.709, count: 1},{lat: 40.5494, lng:-89.6252, count: 1},{lat: 42.6105, lng:-71.2306, count: 1},{lat: 40.0973, lng:-85.671, count: 1},{lat: 40.3987, lng:-86.8642, count: 1},{lat: 40.4224, lng:-86.8031, count: 4},{lat: 47.2166, lng:-122.451, count: 1},{lat: 32.2369, lng:-110.956, count: 1},{lat: 41.3969, lng:-87.3274, count: 2},{lat: 41.7364, lng:-89.7043, count: 2},{lat: 42.3425, lng:-71.0677, count: 1},{lat: 33.8042, lng:-83.8893, count: 1},{lat: 36.6859, lng:-121.629, count: 2},{lat: 41.0957, lng:-80.5052, count: 1},{lat: 46.8841, lng:-123.995, count: 1},{lat: 40.2851, lng:-75.9523, count: 2},{lat: 42.4235, lng:-85.3992, count: 1},{lat: 39.7437, lng:-104.979, count: 2},{lat: 25.6586, lng:-80.3568, count: 7},{lat: 33.0975, lng:-80.1753, count: 1},{lat: 25.7615, lng:-80.2939, count: 1},{lat: 26.3739, lng:-80.1468, count: 1},{lat: 37.6454, lng:-84.8171, count: 1},{lat: 34.2321, lng:-77.8835, count: 1},{lat: 34.6774, lng:-82.928, count: 1},{lat: 39.9744, lng:-86.0779, count: 1},{lat: 35.6784, lng:-97.4944, count: 2},{lat: 33.5547, lng:-84.1872, count: 1},{lat: 27.2498, lng:-80.3797, count: 1},{lat: 41.4789, lng:-81.6473, count: 1},{lat: 41.813, lng:-87.7134, count: 1},{lat: 41.8917, lng:-87.9359, count: 1},{lat: 35.0911, lng:-89.651, count: 1},{lat: 32.6102, lng:-117.03, count: 1},{lat: 41.758, lng:-72.7444, count: 1},{lat: 39.8062, lng:-86.1407, count: 1},{lat: 41.872, lng:-88.1662, count: 1},{lat: 34.1404, lng:-81.3369, count: 1},{lat: 46.15, lng:-60.1667, count: 1},{lat: 36.0679, lng:-86.7194, count: 1},{lat: 43.45, lng:-80.5, count: 1},{lat: 44.3833, lng:-79.7, count: 1},{lat: 45.4167, lng:-75.7, count: 2},{lat: 43.75, lng:-79.2, count: 2},{lat: 45.2667, lng:-66.0667, count: 3},{lat: 42.9833, lng:-81.25, count: 2},{lat: 44.25, lng:-79.4667, count: 3},{lat: 45.2667, lng:-66.0667, count: 2},{lat: 34.3667, lng:-118.478, count: 3},{lat: 42.734, lng:-87.8211, count: 1},{lat: 39.9738, lng:-86.1765, count: 1},{lat: 33.7438, lng:-117.866, count: 1},{lat: 37.5741, lng:-122.321, count: 1},{lat: 42.2843, lng:-85.2293, count: 1},{lat: 34.6574, lng:-92.5295, count: 1},{lat: 41.4881, lng:-87.4424, count: 1},{lat: 25.72, lng:-80.2707, count: 1},{lat: 34.5873, lng:-118.245, count: 1},{lat: 35.8278, lng:-78.6421, count: 1}]
+					};
+				var heatmapLayer = new HeatmapOverlay(cfg);
+
+
+				var map = L.map('map',{
+					layers:heatmapLayer
+				}).setView([-12.99936, -38.51165], 13.5);
+				L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}@2x.png?key=L6Qz68Q1BNIxubtiRVfS', {
+					attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+				}).addTo(map);
+				new L.Toolbar2.Control({
+                    actions: [centralizar]
+                }).addTo(map);
+				heatmapLayer.setData(testData);
+			</script>
+		  </div>
+		</main>
+		<!-- page-content" -->
+	  </div>
+	  <!-- page-wrapper -->
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			  crossorigin="anonymous"></script>
+		  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			  crossorigin="anonymous"></script>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="./js/auth.js"></script>
+	<script src="./js/userPersistence.js"></script>
+	<script src="./js/firebaseData.js"></script>
+	<script src="./js/dashboard.js"></script>
+	<script src="./js/importRegionsAcessos.js"></script>
+	<script src="./js/importMarkers.js"></script>
+	<script src="./js/alertaListener.js"></script>
+	<script src="./js/appAlertaListener.js"></script>
+
+</body>
+</html>

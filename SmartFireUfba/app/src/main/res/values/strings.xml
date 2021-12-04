@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Fire Ufba</string>
+    <string name="telefone">Telefone</string>
+    <string name="todo">TODO</string>
+    <string name="code"> Insira o Código</string>
+    <string name="code_msg2">Nós te enviamos um código SMS, insira o código para confirmar o seu número de telefone, verifique a sua caixa de mensagens</string>
+    <string name="code_msg1">Aguarde pelo código SMS…</string>
+</resources>

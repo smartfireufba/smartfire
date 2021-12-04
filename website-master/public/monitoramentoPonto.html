@@ -1,0 +1,501 @@
+<html>
+<head>
+	<!-- ChartJs-->
+	<script src="../node_modules/chart.js/dist/Chart.js"></script>
+
+	<!-- Jquery-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!--modal-->
+	<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.css" rel="stylesheet">
+
+	<style>
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}
+
+	.clearfix {
+		display: inline-block;
+	}
+	</style>
+
+   <!--Map Css position-->
+   <style>
+   	#map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+   </style>
+
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+   crossorigin="anonymous">
+
+   <!-- FontAwesome-->
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+	<!--Side bar Css-->
+	<link rel="stylesheet" href="./css/sidebar.css">
+
+	<style>
+		.monit-titulo-row {
+			padding-bottom: 0px;
+		}
+
+		.monit-titulo-img {
+			width: 120px;
+			height: 120px;
+		}
+
+		.monit-titulo {
+			text-transform: uppercase;
+			font-weight: bold;
+			padding-top: 50px;
+		}
+
+		.back-button {
+			position:absolute;
+			text-transform: uppercase;
+			font-weight: bold;
+			padding-top: 50px;
+			padding-left: 68%;
+		}
+		.line {
+			background: #818896;
+			height: 1px;
+
+		}
+		.turn-off-button{
+			width: 100%; border-radius: 25px; background-color: rgba(207,0,15, 0.2); border-color: rgba(207,0,0, 1);
+		}
+
+		.text-secondary{color:#6c757d!important}a.text-secondary:focus,a.text-secondary:hover{color:#494f54!important}
+		.icon-left,.card .card-body>.number-left{display:inline-block;float:left}
+		.icon-left,.card .card-body>.icon-right{font-size:3rem}
+		.icon-right,.card .card-body>.number-left{display:inline-block;float:right}
+		.icon-right,.card .card-body>.icon-right{font-size:3rem}
+	</style>
+</head>
+<body>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+		https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+	<!-- Body Embedded Code
+	<div><button id="btn-logout">LogOut</button></div>
+	<div><button id="firebase-data">Data</button></div>
+	<div id = "map"></div>
+	<script>
+		var map = L.map('map').setView([-12.99936, -38.51165], 13.5);
+		L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}@2x.png?key=L6Qz68Q1BNIxubtiRVfS', {
+			attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+		}).addTo(map);
+	</script>
+	-->
+
+	<div class="page-wrapper chiller-theme toggled">
+		<a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+		  	<i class="fas fa-bars"></i>
+		</a>
+		<nav id="sidebar" class="sidebar-wrapper">
+			<div class="sidebar-content" style="padding-bottom: 10px;">
+				<div class="sidebar-brand">
+					<img class = "sidebar-img" id="sidebar-logo" src="./img/smartfirenome.png">
+					<a href="#">SmartFire UFBA</a>
+					<div id="close-sidebar">
+						<i class="fas fa-times"></i>
+					</div>
+				</div>
+				<div class="sidebar-header">
+				<div class="user-pic">
+					<img class="img-responsive img-rounded" 
+					src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+					alt="User picture">
+				</div>
+				<div class="user-info">
+					<span class="user-name">Jhon
+						<strong>Smith</strong>
+					</span>
+					<span class="user-role">Administrator</span>
+					<span class="user-status">
+						<i class="fa fa-circle"></i>
+						<span>Online</span>
+					</span>
+				</div>
+				</div>
+				<!-- sidebar-header  -->
+				<div class="sidebar-search">
+					<div>
+						<div class="input-group">
+							<input type="text" class="form-control search-menu" placeholder="Search...">
+							<div class="input-group-append">
+								<span class="input-group-text">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- sidebar-search  -->
+				<div class="sidebar-menu">
+					<ul>
+						<li class="header-menu">
+							<span>DashBoard</span>
+						</li>
+						<li>
+							<a id="Home" href="home.html">
+								<i class="fas fa-home"></i>
+								<span>Menu Principal</span>
+							</a>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="monitoramento" href="#">
+								<i class="fa fa-chart-line"></i>
+								<span style="font-size:13px">Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="monitoramento.html">
+									<i class="fas fa-chart-bar"></i>
+									<span>Pontual</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="#">
+									<i class="fas fa-chart-area"></i>
+									<span>Regional</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="alertas" href="#">
+								<i class="fas fa-bell"></i>
+								<span>Alertas</span>
+								<span id="alertas-counter" class="badge badge-pill badge-danger"></span>
+							</a>
+						</li>
+						<div id="submenu-alertas" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="alertas-ativos" href="alertasAtivos.html">
+									<i class="fas fa-exclamation-triangle"></i>
+									<span>Alertas Ativos</span>
+									<span id="alertas-counter-sub" class="badge badge-pill badge-danger"></span>
+								</a>
+							</li>
+							<li>
+								<a id="mapa-calor" href="mapaCalor.html">
+									<i class="fas fa-fire"></i>
+									<span>Mapa de Calor</span>
+								</a>
+							</li>
+						</div>
+						<li>
+							<a href="#">
+								<i class="fas fa-history"></i>
+								<span>Histórico</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-user"></i>
+								<span>Contatos</span>
+								<!--<span class="badge badge-pill badge-warning">New</span>-->
+							</a>
+						</li>
+						<li class="header-menu">
+						<span>Configurações de Mapa</span>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="Regioes" href="#">
+								<i class="far fa-map"></i>
+								<span>Regiões</span>
+							</a>
+						</li>
+						<div id="submenu-regioes" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="adicionarRegiao.html">
+									<i class="fas fa-plus"></i>
+									<span>Adicionar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="editarRegiao.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerRegiao" href="removerRegiao.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Região</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="pontos-monitoramento" href="#">
+								<i class="fas fa-map-marker-alt"></i>
+								<span style="font-size:13px">pontos de Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-ponto-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarPonto" href="adicionarPonto.html">
+									<i class="fas fa-plus-square"></i>
+									<span style="font-size:13px">Adicionar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarPonto" href="editarPonto.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerPonto" href="removerPonto.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Ponto</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="area-isolamento" href="#">
+								<i class="fas fa-chart-pie"></i>
+								<span style="font-size:13px">Área de Isolamento</span>
+							</a>
+						</li>
+						<div id="submenu-area-isolamento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarIsolamento" href="adicionarIsolamento.html">
+									<i class="fas fa-plus-circle"></i>
+									<span>Adicionar Área</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerIsolamento" href="removerIsolamento.html">
+									<i class="fas fa-minus-circle"></i>
+									<span>Remover Área</span>
+								</a>
+							</li>
+						</div>
+					</ul>
+				</div>
+				<!-- sidebar-menu  -->
+			</div>
+			<!-- sidebar-content  -->
+			<div class="sidebar-footer">
+				<a href="#">
+					<i class="fa fa-bell"></i>
+					<span class="badge badge-pill badge-warning notification">3</span>
+				</a>
+				<a href="#">
+					<i class="fa fa-envelope"></i>
+					<span class="badge badge-pill badge-success notification">7</span>
+				</a>
+				<a href="#">
+					<i class="fa fa-cog"></i>
+					<span class="badge-sonar"></span>
+				</a>
+				<a href="#">
+				<i id ="log-off" class="fa fa-power-off"></i>
+				</a>
+		  </div>
+		</nav>
+		<!-- sidebar-wrapper  -->
+		<main class="page-content">
+		  	<div class="container-fluid" style="background: #525965;">
+				<div class="row monit-titulo-row">
+					<h3 class="monit-titulo">SmartFire UFBA</h3>
+					<h3 class="monit-titulo-left back-button">VOLTAR</h3>
+				</div>
+			</div>
+			<div class="container-fluid line" style="padding-top: 0;padding-left: 0;padding-right: 0;padding-bottom: 0;"></div>
+			<div class="container-fluid" style="background: #525965;padding-top: 50px;">
+
+				<div class="card-body" style="background-color: #ffffff; border-radius: 25px; margin-top: 40px;margin-bottom: 40px;">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="card mb-3">
+								<div class="card-body">
+									<div class="icon-right text-secondary">
+										<i class="fas fa-map-marker-alt"></i>
+									</div>
+									<div class="number-right text-right">
+										<h6 style="text-align: left;" class="bold text-secondary">Ponto de Monitoramento</h6>
+										<h4 style="text-align: left;" id="mp_nomeIcon" class="text-secondary card-title"></h4>
+									</div>
+									<div class="progress-text text-secondary">
+										<span id="mp_nomeRegion" class="float-left">
+											<medium></medium>
+										</span>
+										</br>
+										<span id="mp_codeRegion" class="float-left">
+											<medium></medium>
+										</span>
+										</br>
+										<span id="mp_codeIcon" class="float-left">
+											<medium></medium>
+										</span> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card mb-3">
+								<div class="card-body">
+									<div class="icon-right text-secondary">
+										<i class="fas fa-power-off"></i>
+									</div>
+									<div class="number-right text-right">
+										<h6 style="text-align: left;" class="bold text-secondary">Status: </h6>
+										<h3 id="power-text" style="text-align: left;" class="text-secondary card-title"></h3>
+									</div>
+									<div class="button">
+										<button id="power-button" class="turn-off-button btn" onclick="powerButton()"></button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card mb-3">
+								<div class="card-body">
+									<div class="icon-right text-secondary">
+										<i class="far fa-calendar-alt"></i>
+									</div>
+									<div class="number-right text-right">
+										<h6 style="text-align: left;" class="bold text-secondary">Período: </h6>
+										<h5 id="periodo" style="text-align: left;" class="text-secondary card-title">Últimos 5 minutos</h5>
+									</div>
+									<div class="dropdown">
+										<button style="width: 100%;border-radius: 25px;margin-top: 3%;" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										  Alterar Período
+										</button>
+										<div id="dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+											<a class="dropdown-item" href="#">Últimos 5 minutos</a>
+											<a class="dropdown-item" href="#">Últimos 60 minutos</a>
+											<a class="dropdown-item" href="#">Últimos 7 dias</a>
+											<a class="dropdown-item" href="#">Últimos 30 dias</a>
+											<a class="dropdown-item" href="#">Últimos 90 dias</a>
+										</div>
+									  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card mb-3">
+							<div class="card-body">
+								<div class="icon-left text-secondary">
+									<i class="fas fa-fire"></i>
+								</div>
+								<div class="number-right text-right">
+									<h6 class="bold text-secondary">Medidas de Gás</h6>
+									<h3 id="gas-media" class="card-title text-warning bold"></h3>
+								</div>
+								<div class="progress progress-bar-sm">
+									<div id="gas-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 0%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<div class="progress-text text-secondary">
+									<span class="float-left">
+										<small id="gas-min"></small>
+									</span> 
+									<span class="float-right">
+										<smal id="gas-max"></small>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card mb-3">
+							<div class="card-body">
+								<div class="icon-left text-secondary">
+									<i class="fas fa-thermometer-half"></i>
+								</div>
+								<div class="number-right text-right">
+									<h6 class="bold text-secondary">Temperatura ºC</h6>
+									<h3 id="tem-media" class="card-title text-primary bold"></h3>
+								</div>
+								<div class="progress progress-bar-sm">
+									<div id="tem-bar" class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" style="width: 0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<div class="progress-text text-secondary">
+									<span class="float-left">
+										<small id="tem-min"></small>
+									</span>
+									<span class="float-right">
+										<small id="tem-max"></small>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card mb-3">
+							<div class="card-body">
+								<div class="icon-left text-secondary">
+									<i class="fas fa-tint"></i>
+								</div>
+								<div class="number-right text-right">
+									<h6 class="bold text-secondary">Umidade</h6>
+									<h3 id="umd-media" class="card-title text-bubblegum bold"></h3>
+								</div>
+								<div class="progress progress-bar-sm">
+									<div id="umd-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-bubblegum" role="progressbar" style="width: 0%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+								</div>
+								<div class="progress-text text-secondary">
+									<span class="float-left">
+										<small id="umd-min"></small>
+									</span> 
+									<span class="float-right">
+										<small id="umd-max"></small>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-body" style="background-color: #ffffff; border-radius: 25px; margin-top: 40px;">
+					<canvas id="myChart" width="400" height="200"></canvas>
+				</div>
+
+				<div class="card-body" style="background-color: #ffffff; border-radius: 25px; margin-top: 40px;">
+					<canvas id="myChart1" width="400" height="200"></canvas>
+				</div>
+
+				<div class="card-body" style="background-color: #ffffff; border-radius: 25px; margin-top: 40px;">
+					<canvas id="myChart2" width="400" height="200"></canvas>
+				</div>
+		  	</div>
+		</main>
+		<!-- page-content" -->
+	  </div>
+	  <!-- page-wrapper -->
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			  crossorigin="anonymous"></script>
+		  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			  crossorigin="anonymous"></script>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="./js/auth.js"></script>
+	<script src="./js/userPersistence.js"></script>
+	<script src="./js/firebaseData.js"></script>
+	<script src="./js/dashboard.js"></script>
+	<script src="./js/monitoramentoPonto.js"></script>
+	<script src="./js/alertaListener.js"></script>
+
+</body>
+</html>

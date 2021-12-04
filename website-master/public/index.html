@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="./css/style.css">
+<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="login-wrap" style="margin-top: 50px;">
+  <div class="login-html">
+    <div>
+    <img class= "imagem" src="./img/smartfirenome.png" width="250" height="250" />
+    </div>
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Entrar</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Registrar</label>
+    <div class="login-form">
+      <div class="sign-in-htm">
+        <div class="group">
+          <label for="user" class="label">E-mail</label>
+          <input id="login-email" type="text" class="input">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Senha</label>
+          <input id="login-password" type="password" class="input" data-type="password">
+        </div>
+        <div class="group">
+          <input id="check" type="checkbox" class="check" checked>
+          <label for="check"><span class="icon"></span> Mantenha-me Conectado</label>
+        </div>
+        <div class="group">
+          <button id="btn-signin"  class="button">Entrar</button>
+        </div>
+        <div class="alert alert-danger" id="alerta-login" style="display: none;" role="alert">
+        </div>
+        <div class="foot-lnk">
+          <a href="#forgot">Esqueceu a Senha?</a>
+        </div>
+      </div>
+      <div class="sign-up-htm">
+        <div class="group">
+          <label for="user" class="label">E-mail</label>
+          <input id="signup-email" type="text" class="input">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Senha</label>
+          <input id="signup-password" type="password" class="input" data-type="password">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Repita a Senha</label>
+          <input id="repeat-password" type="password" class="input" data-type="password">
+        </div>
+        <div class="group">
+          <button id="btn-signup" class="button">Registrar</button>
+        </div>
+        <div class="alert alert-danger" id="alerta-register" style="display: none;" role="alert">
+        </div>
+        <div class="foot-lnk">
+          <label for="tab-1">Lembrou a Senha?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+<!-- Compiled and minified JavaScript -->
+<script src="./js/auth.js"></script>
+</body>
+</html>
