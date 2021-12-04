@@ -1,0 +1,24 @@
+{
+  "name": "projetonode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node start.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^2.9.4",
+    "express": "^4.17.1",
+    "firebase": "^8.2.1",
+    "heatmap.js": "^2.0.5",
+    "leaflet-draw": "^1.0.4",
+    "leaflet-heatmap": "^1.0.0",
+    "leaflet-toolbar": "^0.4.0-alpha.2",
+    "multer": "^1.4.2",
+    "nodeplotlib": "^0.7.3",
+    "vanilla-colorful": "^0.5.3"
+  }
+}

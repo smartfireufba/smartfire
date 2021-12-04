@@ -1,0 +1,404 @@
+<html>
+<head>
+	<!-- Jquery-->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!--Leaflet-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+
+   <!--modal-->
+	<script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.7/dist/jBox.all.min.css" rel="stylesheet">
+
+	<style>
+	.leaflet-left {
+		left: 280;
+	}
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}
+
+	.clearfix {
+		display: inline-block;
+	}
+	</style>
+    <!--Leaflet Toolbar-->
+    <link rel="stylesheet" href="../node_modules/leaflet-toolbar/dist/leaflet.toolbar.css"/>
+    <script src="../node_modules/leaflet-toolbar/dist/leaflet.toolbar.js"></script>
+	<script src="https://unpkg.com/vanilla-picker-mini@1"></script>
+
+
+	<script src="https://cdn.rawgit.com/hayeswise/Leaflet.PointInPolygon/v1.0.0/wise-leaflet-pip.js"></script>
+
+   <!--Map Css position-->
+   <style>
+   	#map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+   </style>
+
+   <!--Bootstrap-->
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+   crossorigin="anonymous">
+
+   <!-- FontAwesome-->
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+	<!--Side bar Css-->
+	<link rel="stylesheet" href="./css/sidebar.css">
+</head>
+<body>
+	<!-- The core Firebase JS SDK is always required and must be listed first -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+		https://firebase.google.com/docs/web/setup#available-libraries -->
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-analytics.js"></script>
+
+	<div class="page-wrapper chiller-theme toggled">
+		<a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+		  <i class="fas fa-bars"></i>
+		</a>
+		<nav id="sidebar" class="sidebar-wrapper">
+			<div class="sidebar-content" style="padding-bottom: 10px;">
+				<div class="sidebar-brand">
+					<img class = "sidebar-img" id="sidebar-logo" src="./img/smartfirenome.png">
+					<a href="#">SmartFire UFBA</a>
+					<div id="close-sidebar">
+						<i class="fas fa-times"></i>
+					</div>
+				</div>
+				<div class="sidebar-header">
+				<div class="user-pic">
+					<img class="img-responsive img-rounded" 
+					src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+					alt="User picture">
+				</div>
+				<div class="user-info">
+					<span class="user-name">Jhon
+						<strong>Smith</strong>
+					</span>
+					<span class="user-role">Administrator</span>
+					<span class="user-status">
+						<i class="fa fa-circle"></i>
+						<span>Online</span>
+					</span>
+				</div>
+				</div>
+				<!-- sidebar-header  -->
+				<div class="sidebar-search">
+					<div>
+						<div class="input-group">
+							<input type="text" class="form-control search-menu" placeholder="Search...">
+							<div class="input-group-append">
+								<span class="input-group-text">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- sidebar-search  -->
+				<div class="sidebar-menu">
+					<ul>
+						<li class="header-menu">
+							<span>DashBoard</span>
+						</li>
+						<li>
+							<a id="Home" href="home.html">
+								<i class="fas fa-home"></i>
+								<span>Menu Principal</span>
+							</a>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="monitoramento" href="#">
+								<i class="fa fa-chart-line"></i>
+								<span style="font-size:13px">Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="monitoramento.html">
+									<i class="fas fa-chart-bar"></i>
+									<span>Pontual</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="#">
+									<i class="fas fa-chart-area"></i>
+									<span>Regional</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="alertas" href="#">
+								<i class="fas fa-bell"></i>
+								<span>Alertas</span>
+								<span id="alertas-counter" class="badge badge-pill badge-danger"></span>
+							</a>
+						</li>
+						<div id="submenu-alertas" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="alertas-ativos" href="alertasAtivos.html">
+									<i class="fas fa-exclamation-triangle"></i>
+									<span>Alertas Ativos</span>
+									<span id="alertas-counter-sub" class="badge badge-pill badge-danger"></span>
+								</a>
+							</li>
+							<li>
+								<a id="mapa-calor" href="mapaCalor.html">
+									<i class="fas fa-fire"></i>
+									<span>Mapa de Calor</span>
+								</a>
+							</li>
+						</div>
+						<li>
+							<a href="#">
+								<i class="fas fa-history"></i>
+								<span>Histórico</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-user"></i>
+								<span>Contatos</span>
+								<!--<span class="badge badge-pill badge-warning">New</span>-->
+							</a>
+						</li>
+						<li class="header-menu">
+						<span>Configurações de Mapa</span>
+						</li>
+						<li class="sidebar-dropdown">
+							<a id="Regioes" href="#">
+								<i class="far fa-map"></i>
+								<span>Regiões</span>
+							</a>
+						</li>
+						<div id="submenu-regioes" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarRegiao" href="adicionarRegiao.html">
+									<i class="fas fa-plus"></i>
+									<span>Adicionar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarRegiao" href="editarRegiao.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Região</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerRegiao" href="removerRegiao.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Região</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="pontos-monitoramento" href="#">
+								<i class="fas fa-map-marker-alt"></i>
+								<span style="font-size:13px">pontos de Monitoramento</span>
+							</a>
+						</li>
+						<div id="submenu-ponto-monitoramento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarPonto" href="adicionarPonto.html">
+									<i class="fas fa-plus-square"></i>
+									<span style="font-size:13px">Adicionar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="editarPonto" href="editarPonto.html">
+									<i class="fas fa-edit"></i>
+									<span>Editar Ponto</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerPonto" href="removerPonto.html">
+									<i class="fas fa-times"></i>
+									<span>Remover Ponto</span>
+								</a>
+							</li>
+						</div>
+						<li class="sidebar-dropdown">
+							<a id="area-isolamento" href="#">
+								<i class="fas fa-chart-pie"></i>
+								<span style="font-size:13px">Área de Isolamento</span>
+							</a>
+						</li>
+						<div id="submenu-area-isolamento" style="display: none;padding-left: 30px;">
+							<li>
+								<a id="adicionarIsolamento" href="adicionarIsolamento.html">
+									<i class="fas fa-plus-circle"></i>
+									<span>Adicionar Área</span>
+								</a>
+							</li>
+							<li>
+								<a id="removerIsolamento" href="removerIsolamento.html">
+									<i class="fas fa-minus-circle"></i>
+									<span>Remover Área</span>
+								</a>
+							</li>
+						</div>
+					</ul>
+				</div>
+				<!-- sidebar-menu  -->
+			</div>
+			<!-- sidebar-content  -->
+			<div class="sidebar-footer">
+				<a href="#">
+					<i class="fa fa-bell"></i>
+					<span class="badge badge-pill badge-warning notification">3</span>
+				</a>
+				<a href="#">
+					<i class="fa fa-envelope"></i>
+					<span class="badge badge-pill badge-success notification">7</span>
+				</a>
+				<a href="#">
+					<i class="fa fa-cog"></i>
+					<span class="badge-sonar"></span>
+				</a>
+				<a href="#">
+				<i id ="log-off" class="fa fa-power-off"></i>
+				</a>
+		  </div>
+		</nav>
+		<!-- sidebar-wrapper  -->
+		<main class="page-content">
+		  <div class="container-fluid">
+			<!--
+			<div><button id="btn-logout">LogOut</button></div>
+			<div><button id="firebase-data">Data</button></div>
+            -->
+            <div id= "vanillaColor" style="top:0;left: 370;" class="leaflet-top leaflet-left"></div>
+			<div id = "map"></div>
+			<script>
+                function $(selector) { return document.querySelector(selector); }
+				var areaIsolamento;
+				var removed;
+				var selected = false;
+                var centralizar = L.Toolbar2.Action.extend({
+                    options: {
+                        toolbarIcon: {  
+                            html: '&#9873;',
+                            tooltip: 'Centralizar'
+                        }
+                    },
+
+                    addHooks: function () {
+                        map.setView([-12.99936, -38.51165], 13.5);
+                    }
+
+                });
+
+				var selecionar = L.Toolbar2.Action.extend({
+                    options: {
+                        toolbarIcon: {  
+                            html: '&#9757;',
+                            tooltip: 'Selecionar Região'
+                        }
+                    },
+
+                    addHooks: function () {
+						selected = true;
+						map.on('click',function(e) {
+							map.addLayer(removed);
+							areaIsolamento = undefined;
+							removed = undefined;
+						});
+					}
+				});
+
+				var remover = L.Toolbar2.Action.extend({
+                    options: {
+                        toolbarIcon: {  
+                            html: '&#10006;',
+                            tooltip: 'Remover Região'
+                        }
+                    },
+
+                    addHooks: function () {
+						if(!selected){
+							window.confirm("Utilize a ferramenta de Selecionar antes de Remover!");
+						}else if(areaIsolamento == undefined){
+							window.confirm("Selecione uma região válida para Remover!");
+						}else{
+							console.log(selected);
+							removed = areaIsolamento;
+							map.removeLayer(areaIsolamento);
+						}
+                    }
+
+                });
+
+                var salvar = L.Toolbar2.Action.extend({
+                    options: {
+                        toolbarIcon: {  
+                            html: '&#10004;',
+                            tooltip: 'Salvar'
+                        }
+                    },
+
+                    addHooks: function () {
+						if(removed== undefined){
+							window.confirm("Remova uma Área de Isolamento antes de Salvar!")
+						}else{
+							var remRef = firebase.database().ref('areaIsolamento/'+removed.options.code);
+							remRef.remove();
+							window.confirm("Removido com Sucesso!");
+							window.location.href = "./removerIsolamento.html"
+                        }
+                    }
+
+                });
+
+				var map = L.map('map').setView([-12.99936, -38.51165], 13.5);
+				L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}@2x.png?key=L6Qz68Q1BNIxubtiRVfS', {
+					attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+                }).addTo(map);
+                new L.Toolbar2.Control({
+                    actions: [centralizar,selecionar,remover,salvar]
+                }).addTo(map);
+				var myIcon = L.icon({
+					iconUrl: './img/point.png',
+					iconSize: [10, 10],
+					iconAnchor: [5, 5],
+					popupAnchor: [-3, -76]
+				});
+			</script>
+		  </div>
+		</main>
+		<!-- page-content" -->
+	  </div>
+	  <!-- page-wrapper -->
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			  crossorigin="anonymous"></script>
+		  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			  crossorigin="anonymous"></script>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="./js/auth.js"></script>
+	<script src="./js/userPersistence.js"></script>
+	<script src="./js/firebaseData.js"></script>
+    <script src="./js/dashboard.js"></script>
+	<script src="./js/importRegions.js"></script>
+	<script src="./js/editarRegiao.js"></script>
+	<script src="./js/importMarkers.js"></script>
+	<script src="./js/removerIsolamento.js"></script>
+	<script src="./js/alertaListener.js"></script>
+	<script src="./js/appAlertaListener.js"></script>
+
+
+</body>
+</html>
